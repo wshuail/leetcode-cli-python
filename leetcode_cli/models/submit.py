@@ -5,10 +5,10 @@ import time
 import math
 import logging
 logging.getLogger().setLevel(level=logging.INFO)
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from leetcode_cli.session import build_session
-from leetcode_cli.config import Config
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
+from leetcode_cli.models.session import build_session
 from leetcode_cli.util import map_question_id_to_slug
+from leetcode_cli.util import Config
 lang_suffixes = Config.lang_suffixes
 check_symbol = Config.check_symbol
 not_check_symbol = Config.not_check_symbol

@@ -4,9 +4,9 @@ import json
 import math
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from leetcode_cli.session import build_session
-from leetcode_cli.config import Config
-from leetcode_cli.user import query_username
+from leetcode_cli.models.session import build_session
+from leetcode_cli.models.user import query_username
+from leetcode_cli.util import Config
 
 check_symbol = Config.check_symbol
 not_check_symbol = Config.not_check_symbol

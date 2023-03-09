@@ -4,7 +4,7 @@ import json
 import requests
 from urllib3 import PoolManager
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from leetcode_cli.config import Config
+from leetcode_cli.util import Config
 
 
 

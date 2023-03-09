@@ -2,20 +2,24 @@ import os
 import sys
 import argparse
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from leetcode_cli.detail import detail
-from leetcode_cli.list import list_question
-from leetcode_cli.stat import stat
-from leetcode_cli.today import today
-from leetcode_cli.session import build_session
-from leetcode_cli.config import Config
-from leetcode_cli.submit import test
-from leetcode_cli.submit import submit
+from leetcode_cli.models import detail
+from leetcode_cli.models import list_question
+from leetcode_cli.models import stat
+from leetcode_cli.models import today
+from leetcode_cli.models import build_session
+from leetcode_cli.models import test
+from leetcode_cli.models import submit
+from leetcode_cli.util import Config
+from leetcode_cli.util import init
 
 
-session = build_session()
 
 
+@init
 def main():
+    
+    session = build_session()
+    
     parser = argparse.ArgumentParser(
             prog = 'LeetCode',
             description="LeetCode in command line"
@@ -64,3 +68,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+

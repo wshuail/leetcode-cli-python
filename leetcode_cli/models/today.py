@@ -3,8 +3,8 @@ import sys
 import json
 import math
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from leetcode_cli.detail import detail
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
+from leetcode_cli.models.detail import detail
 
 
 def query_question_today(session):

@@ -11,12 +11,13 @@ setuptools.setup(
     description=("A command line tool for Leetcode based on Python"),
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/liuzheng1990/python_packaging_demo",
+    url="https://github.com/wshuail/leetcode-cli-python",
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    keywords=['Leetcode', 'Command Line', 'Python'],
     install_requires=["requests", "bs4"],
     packages=setuptools.find_packages(),
     python_requires=">=3.6",
@@ -24,5 +25,6 @@ setuptools.setup(
         "console_scripts": [
             "lc = leetcode_cli.cli:main",
         ]
-    }
+    },
+    license='GPL'
 )

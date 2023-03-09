@@ -3,12 +3,12 @@ import os
 import json
 from bs4 import BeautifulSoup
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from leetcode_cli.config import Config
 from leetcode_cli.session import build_session
 from leetcode_cli.detail import query_question_detail
 from leetcode_cli.detail import parse_detail_response
 from leetcode_cli.util import map_question_id_to_slug
 from leetcode_cli.util import map_slug_to_question_id
+from leetcode_cli.util import Config
 
 
 lang = Config.lang

@@ -2,8 +2,8 @@ import os
 import sys
 import json
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from leetcode_cli.session import build_session
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
+from leetcode_cli.models import build_session
 
 
 
