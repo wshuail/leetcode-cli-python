@@ -1,11 +1,13 @@
 import sys
 import os
 import json
+import re
+from datetime import datetime
 from bs4 import BeautifulSoup
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from leetcode_cli.session import build_session
-from leetcode_cli.detail import query_question_detail
-from leetcode_cli.detail import parse_detail_response
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
+from leetcode_cli.models.session import build_session
+from leetcode_cli.models.detail import query_question_detail
+from leetcode_cli.models.detail import parse_detail_response
 from leetcode_cli.util import map_question_id_to_slug
 from leetcode_cli.util import map_slug_to_question_id
 from leetcode_cli.util import Config
@@ -13,6 +15,8 @@ from leetcode_cli.util import Config
 
 lang = Config.lang
 lang_suffix = Config.lang_suffixes[lang]
+name = Config.name
+email = Config.email
 
 cur_dir = os.getcwd()
 
@@ -33,10 +37,29 @@ def code(question, session):
         session = build_session()
         response = query_question_detail(question_id, session)
         detail = parse_detail_response(response)
-    
+    print ('detail: {}'.format(detail))
+    print (detail.keys())
+
+    content = detail['content']
+    content = '\n'.join(['#  ' + line for line in content.splitlines()])
+
     code_snippet = [code_snippet for code_snippet in detail['codeSnippets'] if code_snippet['langSlug'] == lang][0]['code']
 
     with open(os.path.join(cur_dir, '{}.{}.{}'.format(str(question_id), title_slug, lang_suffix)), 'w') as f:
+        if name:
+            f.write('#  Name: {}'.format(name))
+            f.write('\n')
+        if email:
+            f.write('#  Email: {}'.format(email))
+            f.write('\n')
+        f.write('#  Date: {}'.format(datetime.now().strftime('%Y-%m-%d')))
+        f.write('\n')
+        f.write('\n\n\n')
+        f.write(content)
+        f.write('\n\n\n')
+        if re.search(r":\s*List\b", code_snippet):
+            f.write("from typing import List")
+            f.write('\n\n\n')
         f.write(code_snippet)
 
     print (code_snippet)

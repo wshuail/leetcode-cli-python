@@ -2,22 +2,21 @@ import os
 import sys
 import argparse
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from leetcode_cli.models import detail
-from leetcode_cli.models import list_question
-from leetcode_cli.models import stat
-from leetcode_cli.models import today
-from leetcode_cli.models import build_session
-from leetcode_cli.models import test
-from leetcode_cli.models import submit
+from leetcode_cli.models.session import build_session
+from leetcode_cli.models.detail import detail
+from leetcode_cli.models.list import list_question
+from leetcode_cli.models.stat import stat
+from leetcode_cli.models.today import today
+from leetcode_cli.models.submit import submit
+from leetcode_cli.models.code import code
 from leetcode_cli.util import Config
 from leetcode_cli.util import init
 
 
-
-
 @init
 def main():
-    
+
+
     session = build_session()
     
     parser = argparse.ArgumentParser(
@@ -27,22 +26,26 @@ def main():
 
     subparser = parser.add_subparsers(title='Command Options', dest='cmd')
     
-    show_parser = subparser.add_parser(name='show')
-    show_parser.add_argument("--question", required=False)
-
-    list_parser = subparser.add_parser(name='list')
-    list_parser.add_argument("--level", type=str)
-    list_parser.add_argument("--undo", type=bool, default=False)
-    list_parser.add_argument("--free", type=bool, default=False)
-
-    stat_parser = subparser.add_parser(name='stat')
-    today_parser = subparser.add_parser(name='today')
+    stat_parser = subparser.add_parser(name='stat', description="show your leetcode stat")
     
-    test_parser = subparser.add_parser(name='test')
-    test_parser.add_argument("--file", type=str)
+    today_parser = subparser.add_parser(name='today', description="show today's question")
+    
+    list_parser = subparser.add_parser(name='list', description="list questions")
+    list_parser.add_argument("--level", "-l", type=str, choices=['easy', 'medium', 'hard'], help="the level of difficulty ['easy', 'medium', 'hard']")
+    list_parser.add_argument("--undo", "-u", action="store_true", help="only show undo questions")
+    list_parser.add_argument("--free", "-f", action="store_true", help="only show free questions")
+    
+    show_parser = subparser.add_parser(name='show', description="show the content of a question")
+    show_parser.add_argument("--question", "-q", required=True)
+    
+    code_parser = subparser.add_parser(name='code', description="download the code template to local")
+    code_parser.add_argument("--question", type=str)
 
-    submit_parser = subparser.add_parser(name='submit')
-    submit_parser.add_argument("--file", type=str)
+    test_parser = subparser.add_parser(name='test', description="test your code with official cases")
+    test_parser.add_argument("--file", "-f", required=True, type=str)
+
+    submit_parser = subparser.add_parser(name='submit', description="submit your code")
+    submit_parser.add_argument("--file", "-f", required=True, type=str)
     
     args = parser.parse_args()
     
@@ -65,6 +68,11 @@ def main():
     elif cmd == 'submit':
         file = args.file
         submit(file=file, session=session)
+    elif cmd == 'code':
+        question = args.question
+        code(question, session)
+    else:
+        raise ValueError ('Invalid Argument')
 
 if __name__ == "__main__":
     main()

@@ -7,25 +7,6 @@ import requests
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 
-class Config(object):
-    with open(os.path.join(os.path.expanduser('~/.lc'), 'config.json'), 'r') as f:
-        config = json.loads(f.read())
-    
-    id_slug_cache = config.get('id_slug_cache')
-    slug_id_cache = config.get('slug_id_cache')
-    leetcode_session = config.get('leetcode_session')
-    lang = config.get('lang')
-    lang_suffixes = config['lang_suffixes']
-
-    check_symbol = config['check_symbol']
-    not_check_symbol = config['not_check_symbol']
-
-
-
-id_slug_cache = Config.id_slug_cache
-slug_id_cache = Config.slug_id_cache
-
-
 
 def map_question_id_to_slug(question_id):
     with open(os.path.expanduser('~/.lc/{}'.format(id_slug_cache)), 'r') as f:
@@ -100,6 +81,7 @@ def create_config_file():
 
     config['check_symbol'] = u'\u2705'
     config['not_check_symbol'] = u'\u274C'
+    config['lock_symbol'] = u'\U0001F512'
 
     config_path = os.path.join(os.path.expanduser('~/.lc'), 'config.json')
     with open(config_path, 'w') as f:
@@ -157,6 +139,32 @@ def init(func):
         func(*args, **kwargs)
     return wrapper
 
+
+
+class Config(object):
+    if not os.path.exists(os.path.join(os.path.expanduser('~/.lc'), 'config.json')):
+        create_config_file()
+    with open(os.path.join(os.path.expanduser('~/.lc'), 'config.json'), 'r') as f:
+        config = json.loads(f.read())
+
+    name = config.get('name')
+    email = config.get('email')
+    
+    id_slug_cache = config.get('id_slug_cache')
+    slug_id_cache = config.get('slug_id_cache')
+    leetcode_session = config.get('leetcode_session')
+    lang = config.get('lang')
+    lang_suffixes = config['lang_suffixes']
+
+    check_symbol = config['check_symbol']
+    not_check_symbol = config['not_check_symbol']
+    
+    lock_symbol = config['lock_symbol']
+
+
+
+id_slug_cache = Config.id_slug_cache
+slug_id_cache = Config.slug_id_cache
 
 
 

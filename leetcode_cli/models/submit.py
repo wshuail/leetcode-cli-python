@@ -109,7 +109,6 @@ def query_console_panel_config(question, session):
 def get_question_test_cases(question, session):
     response = query_console_panel_config(question, session)
     test_cases = response['question']['exampleTestcaseList']
-    print (test_cases)
     return test_cases
 
 

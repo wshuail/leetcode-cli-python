@@ -4,7 +4,11 @@ import json
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
 from leetcode_cli.models import build_session
+from leetcode_cli.util import Config
 
+check_symbol = Config.check_symbol
+not_check_symbol = Config.not_check_symbol
+lock_symbol = Config.lock_symbol
 
 
 def query_problemset_question_list(session, level=None):
@@ -51,7 +55,7 @@ def query_problemset_question_list(session, level=None):
     return response
 
 
-def parse_list_response(response, undo=False, free=False):
+def parse_list_response(response, level, undo=False, free=False):
 
     questions = response['problemsetQuestionList']['questions']
 
@@ -75,12 +79,10 @@ def parse_list_response(response, undo=False, free=False):
     for q in questions:
         line = ' '*10
         line += q[0].ljust(8)
-        line += u'\u2705' if q[4] == 'ac' else u'\u2718'
-        if q[4] == 'ac':
-            line += ' '*4
-        else:
-            line += ' '*5
-        line += u'\U0001F512'.ljust(8) if q[3] else ' '*9
+        if level is None:
+            line += q[2].ljust(15)
+        line += check_symbol.ljust(5) if q[4] == 'ac' else not_check_symbol.ljust(5)
+        line += lock_symbol.ljust(8) if q[3] else ' '*9
         line += q[1].ljust(max_len+5)
         line += '\n'
         output += line
@@ -90,7 +92,7 @@ def parse_list_response(response, undo=False, free=False):
 
 def list_question(session, level=None, undo=False, free=False):
     response = query_problemset_question_list(session=session, level=level)
-    parse_list_response(response, undo=undo, free=free)
+    parse_list_response(response, level=level, undo=undo, free=free)
 
 
 if __name__ == '__main__':
