@@ -77,7 +77,7 @@ def create_config_file():
             "javascript": "js",
             "java": "java",
             "c": "c",
-            "c++": "cpp",
+            "cpp": "cpp",
             "ruby": "rb",
             "go": "go",
             "php": "php",
@@ -92,7 +92,29 @@ def create_config_file():
             "typescript": "ts",
             "dart": "dart",
             "clojure": "clj"
-        }
+            }
+
+    config['comment_symbol'] = {
+            "python3": "#",
+            "javascript": "//",
+            "java": "//",
+            "c": "//",
+            "cpp": "//",
+            "ruby": "#",
+            "go": "//",
+            "php": "//",
+            "swift": "//",
+            "kotlin": "//",
+            "rust": "//",
+            "perl": "#",
+            "haskell": "--",
+            "scala": "//",
+            "lua": "--",
+            "r": "#",
+            "typescript": "//",
+            "dart": "//",
+            "clojure": ";;"
+            }
 
 
     config['id_slug_cache'] = 'id_slug_cache.json'
@@ -116,6 +138,7 @@ def update_config():
         config = json.loads(f.read())
     leetcode_session = config.get('leetcode_session')
     if leetcode_session is None or leetcode_session == "":
+        logging.info('config will be updated.')
         logging.info("config {} need to be updated.".format(config_path))
         lc_session_input_str = """
             1/4
@@ -174,6 +197,7 @@ class Config(object):
     leetcode_session = config.get('leetcode_session')
     lang = config.get('lang')
     lang_suffixes = config['lang_suffixes']
+    comment_symbol = config['comment_symbol']
 
     check_symbol = config['check_symbol']
     not_check_symbol = config['not_check_symbol']

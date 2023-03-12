@@ -3,13 +3,11 @@ import os
 import json
 from bs4 import BeautifulSoup
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
-from leetcode_cli.models import build_session
+from leetcode_cli.models.session import build_session
 from leetcode_cli.util import map_question_id_to_slug
 from leetcode_cli.util import Config
 
 
-lang = Config.lang
-lang_suffix = Config.lang_suffixes[lang]
 
 
 def query_question_detail(question, session):
@@ -56,8 +54,6 @@ def query_question_detail(question, session):
         }
     """
 
-    print (title_slug)
-
     body = {"query": query, "variables": {"titleSlug": title_slug}, "operationName": "getQuestionDetail"}
     body = json.dumps(body)
 
@@ -85,21 +81,8 @@ def cache_question_detail(detail):
 def parse_detail_response(response):
 
     detail = response['question']
-    print (detail)
     
     detail['content'] = BeautifulSoup(detail['content'], 'html.parser').get_text()
-
-
-
-    """
-    
-    content = detail['content']
-    content = BeautifulSoup(content, 'html.parser').get_text()
-    print ('content: {}'.format(content))
-
-    code_snippets = detail['codeSnippets']
-    target_code_snippet = [code_snippet for code_snippet in code_snippets if code_snippet['langSlug'] == lang][0]['code']
-    """
 
     cache_question_detail(detail)
 

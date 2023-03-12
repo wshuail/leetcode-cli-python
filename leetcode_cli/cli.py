@@ -36,17 +36,17 @@ def main():
     list_parser.add_argument("--free", "-f", action="store_true", help="only show free questions")
     
     show_parser = subparser.add_parser(name='show', description="show the content of a question")
-    show_parser.add_argument("question", required=True)
+    show_parser.add_argument("question")
     
     code_parser = subparser.add_parser(name='code', description="download the code template to local")
-    code_parser.add_argument("question", required=True)
+    code_parser.add_argument("question")
     code_parser.add_argument("--lang", type=str)
 
     test_parser = subparser.add_parser(name='test', description="test your code with official cases")
-    test_parser.add_argument("file", required=True, type=str)
+    test_parser.add_argument("file", type=str)
 
     submit_parser = subparser.add_parser(name='submit', description="submit your code")
-    submit_parser.add_argument("file", required=True, type=str)
+    submit_parser.add_argument("file", type=str)
     
     args = parser.parse_args()
     

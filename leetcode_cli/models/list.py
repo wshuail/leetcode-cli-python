@@ -3,7 +3,7 @@ import sys
 import json
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
-from leetcode_cli.models import build_session
+from leetcode_cli.models.session import build_session
 from leetcode_cli.util import Config
 
 check_symbol = Config.check_symbol
