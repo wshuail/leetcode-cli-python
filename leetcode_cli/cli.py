@@ -8,6 +8,7 @@ from leetcode_cli.models.list import list_question
 from leetcode_cli.models.stat import stat
 from leetcode_cli.models.today import today
 from leetcode_cli.models.submit import submit
+from leetcode_cli.models.test import test
 from leetcode_cli.models.code import code
 from leetcode_cli.util import Config
 from leetcode_cli.util import init
