@@ -73,8 +73,27 @@ def create_config_file():
     config['lang'] = ""
     
     config['lang_suffixes'] = {
-            'python3': 'py'
-            }
+            "python3": "py",
+            "javascript": "js",
+            "java": "java",
+            "c": "c",
+            "c++": "cpp",
+            "ruby": "rb",
+            "go": "go",
+            "php": "php",
+            "swift": "swift",
+            "kotlin": "kt",
+            "rust": "rs",
+            "perl": "pl",
+            "haskell": "hs",
+            "scala": "scala",
+            "lua": "lua",
+            "r": "r",
+            "typescript": "ts",
+            "dart": "dart",
+            "clojure": "clj"
+        }
+
 
     config['id_slug_cache'] = 'id_slug_cache.json'
     config['slug_id_cache'] = 'slug_id_cache.json'

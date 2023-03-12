@@ -13,7 +13,7 @@ from leetcode_cli.util import map_slug_to_question_id
 from leetcode_cli.util import Config
 
 
-lang = Config.lang
+global_lang = Config.lang
 lang_suffix = Config.lang_suffixes[lang]
 name = Config.name
 email = Config.email
@@ -22,7 +22,12 @@ cur_dir = os.getcwd()
 
 
 
-def code(question, session):
+def code(question, session, lang=None):
+    if lang is None and global_lang is not None:
+        lang = global_lang
+    if lang is None and global_lang is None:
+        raise ValueError("Either update config or pass argument for lang")
+
     try:
         question_id = int(question)
         title_slug = map_question_id_to_slug(question_id)
