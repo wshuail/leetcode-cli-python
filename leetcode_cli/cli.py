@@ -7,6 +7,7 @@ from leetcode_cli.models.detail import detail
 from leetcode_cli.models.list import list_question
 from leetcode_cli.models.stat import stat
 from leetcode_cli.models.today import today
+from leetcode_cli.models.similar import similar
 from leetcode_cli.models.submit import submit
 from leetcode_cli.models.test import test
 from leetcode_cli.models.code import code
@@ -35,6 +36,9 @@ def main():
     list_parser.add_argument("--level", "-l", type=str, choices=['easy', 'medium', 'hard'], help="the level of difficulty ['easy', 'medium', 'hard']")
     list_parser.add_argument("--undo", "-u", action="store_true", help="only show undo questions")
     list_parser.add_argument("--free", "-f", action="store_true", help="only show free questions")
+    
+    similar_parser = subparser.add_parser(name='similar', description="show similar questions")
+    similar_parser.add_argument("question")
     
     show_parser = subparser.add_parser(name='show', description="show the content of a question")
     show_parser.add_argument("question")
@@ -68,6 +72,9 @@ def main():
         question = args.question
         lang = args.lang
         code(question, session, lang)
+    elif cmd == 'similar':
+        question = args.question
+        similar(question, session)
     elif cmd == 'test':
         file = args.file
         test(file=file, session=session)

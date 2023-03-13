@@ -104,16 +104,23 @@ def submit(file, session):
     memory = sub_details['memoryDisplay']
     runtime_per = sub_details['runtimePercentile']
     memory_per = sub_details['memoryPercentile']
-
+    
+    print ('status_code: {}'.format(sub_details['statusCode']))
 
     if runtime == 'N/A' or memory == 'N/A' or runtime_per is None or memory_per is None:
+        runtimeError, compileError = sub_details.get('runtimeError'), sub_details['compileError']
+        if runtimeError:
+            logging.info('runtime error\n{}'.format(runtimeError))
+        if compileError:
+            logging.info('compile error\n{}'.format(compileError))
+        logging.info('\n')
         logging.info('Submission Failed.')
     else:
         memory_per_ceil = max(math.ceil(memory_per)//2, 1)
         runtime_per_ceil = max(math.ceil(runtime_per)//2, 1)
-        print ('{} {} {}{}'.format('Runtime'.ljust(10), str(runtime).rjust(10), check_symbol*runtime_per_ceil, not_check_symbol*(50-runtime_per_ceil)))
-        print ('{} {} {}{}'.format('Memory'.ljust(10), str(memory).rjust(10), check_symbol*memory_per_ceil, not_check_symbol*(50-memory_per_ceil)))
-        logging.info("{} {} {} {}".format(runtime, runtime_per, memory, memory_per))
+        print ('{} {} {} {}{}'.format('Runtime'.ljust(10), str(runtime).ljust(10), str(round(runtime_per, 2)).ljust(10), check_symbol*runtime_per_ceil, not_check_symbol*(50-runtime_per_ceil)))
+        print ('{} {} {} {}{}'.format('Memory'.ljust(10), str(memory).ljust(10), str(round(memory_per, 2)).ljust(10), check_symbol*memory_per_ceil, not_check_symbol*(50-memory_per_ceil)))
+        # logging.info("{} {} {} {}".format(runtime, runtime_per, memory, memory_per))
         logging.info('Submission Successed.')
 
     return response

@@ -78,7 +78,7 @@ def parse_list_response(response, level, undo=False, free=False):
     output = ''
     for q in questions:
         line = ' '*10
-        line += q[0].ljust(8)
+        line += str(q[0]).ljust(8)
         if level is None:
             line += q[2].ljust(15)
         line += check_symbol.ljust(5) if q[4] == 'ac' else not_check_symbol.ljust(5)
