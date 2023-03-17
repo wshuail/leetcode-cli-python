@@ -2,6 +2,8 @@ import os
 import sys
 import json
 import math
+import logging
+logging.getLogger().setLevel(logging.INFO)
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from leetcode_cli.models.session import build_session
@@ -52,6 +54,11 @@ def parse_stat_response(response):
     overall_qc = {}
     for level_qc in response['allQuestionsCount']:
         overall_qc[level_qc['difficulty']] = level_qc['count']
+
+    user_response = response.get('matchedUser')
+    if user_response is None:
+        logging.info("Failed to get user stat. You may need reauth.")
+        sys.exit(1)
         
     ac_qc = {}
     for level_qc in response['matchedUser']['submitStatsGlobal']['acSubmissionNum']:
@@ -67,10 +74,10 @@ def parse_stat_response(response):
     m_rate = math.ceil(m_rate*5)
     h_rate = math.ceil(h_rate*5)
 
-    print ('{} {}/{} {}{}'.format('Overall'.ljust(10), str(ac_qc['All']).rjust(5), str(overall_qc['All']).ljust(5), check_symbol*all_rate, not_check_symbol*(50-all_rate)))
-    print ('{} {}/{} {}{}'.format('Easy'.ljust(10), str(ac_qc['Easy']).rjust(5), str(overall_qc['Easy']).ljust(5), check_symbol*e_rate, not_check_symbol*(50-e_rate)))
-    print ('{} {}/{} {}{}'.format('Medium'.ljust(10), str(ac_qc['Medium']).rjust(5), str(overall_qc['Medium']).ljust(5), check_symbol*m_rate, not_check_symbol*(50-m_rate)))
-    print ('{} {}/{} {}{}'.format('Hard'.ljust(10), str(ac_qc['Hard']).rjust(5), str(overall_qc['Hard']).ljust(5), check_symbol*h_rate, not_check_symbol*(50-h_rate)))
+    logging.info('{} {}/{} {}{}'.format('Overall'.ljust(10), str(ac_qc['All']).rjust(5), str(overall_qc['All']).ljust(5), check_symbol*all_rate, not_check_symbol*(50-all_rate)))
+    logging.info('{} {}/{} {}{}'.format('Easy'.ljust(10), str(ac_qc['Easy']).rjust(5), str(overall_qc['Easy']).ljust(5), check_symbol*e_rate, not_check_symbol*(50-e_rate)))
+    logging.info('{} {}/{} {}{}'.format('Medium'.ljust(10), str(ac_qc['Medium']).rjust(5), str(overall_qc['Medium']).ljust(5), check_symbol*m_rate, not_check_symbol*(50-m_rate)))
+    logging.info('{} {}/{} {}{}'.format('Hard'.ljust(10), str(ac_qc['Hard']).rjust(5), str(overall_qc['Hard']).ljust(5), check_symbol*h_rate, not_check_symbol*(50-h_rate)))
 
 
 def stat(session):

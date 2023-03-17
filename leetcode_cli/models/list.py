@@ -44,7 +44,7 @@ def query_problemset_question_list(session, level=None, limit=100):
         level = level.upper()
         body = {"query": query, "variables": {"filters": {"difficulty": level}, "categorySlug": "", "skip": 0, "limit": limit}, "operationName": "problemsetQuestionList"}
     else:
-        body = {"query": query, "variables": {"filters": {}, "categorySlug": "", "skip": 0, "limit": 9999}, "operationName": "problemsetQuestionList"}
+        body = {"query": query, "variables": {"filters": {}, "categorySlug": "", "skip": 0, "limit": limit}, "operationName": "problemsetQuestionList"}
     
     body = json.dumps(body)
 

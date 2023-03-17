@@ -93,7 +93,11 @@ def submit(file, session):
     request = json.dumps(request)
     response = session.request(method='POST', url="https://leetcode.com/problems/two-sum/submit/", body=request)
     response = json.loads(response.data)
-    submission_id = response['submission_id']
+    submission_id = response.get('submission_id')
+    if submission_id is None:
+        logging.info('response: {}'.format(response))
+        logging.info('Failed to get submission id')
+        sys.exit(1)
     time.sleep(3)
     submission_response = query_submission_details(submission_id=submission_id, session=session)
     sub_details = submission_response['submissionDetails']

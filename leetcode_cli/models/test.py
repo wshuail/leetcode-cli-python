@@ -88,7 +88,11 @@ def test(file, session):
 
     response = session.request(method='POST', url="https://leetcode.com/problems/{}/interpret_solution/".format(title_slug), body=request)
     response = json.loads(response.data)
-    interpret_id = response['interpret_id']
+    interpret_id = response.get('interpret_id')
+    if interpret_id is None:
+        logging.info('response: {}'.format(response))
+        logging.info('Failed to get interpret id')
+        sys.exit(1)
     time.sleep(5)
     r = session.request(method='GET', url="https://leetcode.com/submissions/detail/{}/check/".format(interpret_id))
     r = json.loads(r.data)

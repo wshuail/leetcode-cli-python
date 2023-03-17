@@ -2,6 +2,8 @@ import sys
 import os
 import json
 import re
+import logging
+logging.getLogger().setLevel(logging.INFO)
 from datetime import datetime
 from bs4 import BeautifulSoup
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
@@ -35,6 +37,10 @@ def code(question, session, lang=None):
     except:
         title_slug = question
         question_id = map_slug_to_question_id(title_slug)
+    
+    if os.path.exists(os.path.join(cur_dir, '{}.{}.{}'.format(str(question_id), title_slug, lang_suffix))):
+        logging.info("target file {}.{}.{} exist...".format(str(question_id), title_slug, lang_suffix))
+        return 0
 
     if os.path.exists(os.path.expanduser('~/.lc/cache/{}.{}.json'.format(question_id, title_slug))):
         with open(os.path.expanduser('~/.lc/cache/{}.{}.json'.format(question_id, title_slug)), 'r') as f:
@@ -64,8 +70,10 @@ def code(question, session, lang=None):
         f.write(content)
         f.write('\n\n\n')
         if hints:
-            f.write(hints)
-            f.write('\n\n\n')
+            f.write('#  Hints:\n')
+            for i, hint in enumerate(hints):
+                f.write('#  {}: {}\n'.format(i, hint))
+            f.write('\n\n')
         if lang == 'python3':
             if re.search(r":\s*List\b", code_snippet):
                 f.write("from typing import List")

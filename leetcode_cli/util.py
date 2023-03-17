@@ -67,10 +67,10 @@ def cache_stat_status_pairs():
 
 def create_config_file():
     config = {}
-    config['leetcode_session'] = ""
-    config['name'] = ""
-    config['email'] = ""
-    config['lang'] = ""
+    config['leetcode_session'] = None
+    config['name'] = None
+    config['email'] = None
+    config['lang'] = None
     
     config['lang_suffixes'] = {
             "python3": "py",
@@ -132,42 +132,37 @@ def create_config_file():
 
 
 
+def update_config_field(config, field):
+    field_value = config.get(field)
+    input_str = "please update {}\n".format(field)
+    if field_value is not None or field_value != "":
+        input_str += "current {}: {}\nPress ENTER to skip if you want to remain.\n".format(field, field_value)
+    new_field_value = input(input_str)
+    if new_field_value == '':
+        return field_value
+    else:
+        return new_field_value
+
+
 def update_config():
+    logging.info('config will be updated.')
+    
     config_path = os.path.join(os.path.expanduser('~/.lc'), 'config.json')
+    if not os.path.exists(config_path):
+        create_config_file()
+
     with open(config_path, 'r') as f:
         config = json.loads(f.read())
-    leetcode_session = config.get('leetcode_session')
-    if leetcode_session is None or leetcode_session == "":
-        logging.info('config will be updated.')
-        logging.info("config {} need to be updated.".format(config_path))
-        lc_session_input_str = """
-            1/4
-            Please input your leetcode session.
-            Read README if you don't know how.
-            """
-        leetcode_session = input(lc_session_input_str)
 
-        name = config.get('name')
-        name = input('2/4 please input your name.')
-        email = config.get('email')
-        email = input('3/4 please input your email.')
-        lang = config.get('lang')
-        lang = input('4/4 please input your preferable lang.')
-        
-        config['leetcode_session'] = leetcode_session
-        config['name'] = name
-        config['email'] = email
-        config['lang'] = lang
-        
-        with open(config_path, 'w') as f:
-            f.write(json.dumps(config))
+    for i, field in enumerate(['leetcode_session', 'name', 'email', 'lang']):
+        logging.info("{}/4".format(str(i+1)))
+        field_value = update_config_field(config, field)
+        config[field] = field_value
 
-        logging.info("config {} was updated.".format(config_path))
+    with open(config_path, 'w') as f:
+        f.write(json.dumps(config))
 
-    else:
-        pass
-
-
+    logging.info("config {} was updated.".format(config_path))
 
 def init(func):
     def wrapper(*args, **kwargs):
@@ -177,11 +172,15 @@ def init(func):
             cache_stat_status_pairs()
         if not os.path.exists(os.path.join(os.path.expanduser('~/.lc'), 'config.json')):
             create_config_file()
-        update_config()
+        
+        with open(os.path.join(os.path.expanduser('~/.lc'), 'config.json'), 'r') as f:
+            config = json.loads(f.read())
+        
+        leetcode_session = config.get('leetcode_session')
+        if leetcode_session is None or leetcode_session == "":
+            update_config()
         func(*args, **kwargs)
     return wrapper
-
-
 
 class Config(object):
     if not os.path.exists(os.path.join(os.path.expanduser('~/.lc'), 'config.json')):
@@ -210,5 +209,7 @@ id_slug_cache = Config.id_slug_cache
 slug_id_cache = Config.slug_id_cache
 
 
+if __name__ == '__main__':
+    update_config()
 
 

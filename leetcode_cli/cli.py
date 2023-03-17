@@ -13,6 +13,7 @@ from leetcode_cli.models.test import test
 from leetcode_cli.models.code import code
 from leetcode_cli.util import Config
 from leetcode_cli.util import init
+from leetcode_cli.util import update_config
 
 
 @init
@@ -54,6 +55,8 @@ def main():
     submit_parser = subparser.add_parser(name='submit', description="submit your code")
     submit_parser.add_argument("file", type=str)
     
+    config_parser = subparser.add_parser(name='config', description="update config")
+    
     args = parser.parse_args()
     
     cmd = vars(args)['cmd']
@@ -82,6 +85,8 @@ def main():
     elif cmd == 'submit':
         file = args.file
         submit(file=file, session=session)
+    elif cmd == 'config':
+        update_config()
     else:
         raise ValueError ('Invalid Argument')
 
