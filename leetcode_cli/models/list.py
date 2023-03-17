@@ -11,7 +11,7 @@ not_check_symbol = Config.not_check_symbol
 lock_symbol = Config.lock_symbol
 
 
-def query_problemset_question_list(session, level=None):
+def query_problemset_question_list(session, level=None, limit=100):
     
     query = """
         query problemsetQuestionList(
@@ -42,7 +42,7 @@ def query_problemset_question_list(session, level=None):
 
     if level:
         level = level.upper()
-        body = {"query": query, "variables": {"filters": {"difficulty": level}, "categorySlug": "", "skip": 0, "limit": 9999}, "operationName": "problemsetQuestionList"}
+        body = {"query": query, "variables": {"filters": {"difficulty": level}, "categorySlug": "", "skip": 0, "limit": limit}, "operationName": "problemsetQuestionList"}
     else:
         body = {"query": query, "variables": {"filters": {}, "categorySlug": "", "skip": 0, "limit": 9999}, "operationName": "problemsetQuestionList"}
     
@@ -90,8 +90,8 @@ def parse_list_response(response, level, undo=False, free=False):
     print (output)
 
 
-def list_question(session, level=None, undo=False, free=False):
-    response = query_problemset_question_list(session=session, level=level)
+def list_question(session, level=None, undo=False, free=False, limit=100):
+    response = query_problemset_question_list(session=session, level=level, limit=limit)
     parse_list_response(response, level=level, undo=undo, free=free)
 
 

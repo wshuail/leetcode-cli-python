@@ -36,6 +36,7 @@ def main():
     list_parser.add_argument("--level", "-l", type=str, choices=['easy', 'medium', 'hard'], help="the level of difficulty ['easy', 'medium', 'hard']")
     list_parser.add_argument("--undo", "-u", action="store_true", help="only show undo questions")
     list_parser.add_argument("--free", "-f", action="store_true", help="only show free questions")
+    list_parser.add_argument("--limit", type=int, help="limit number of the list questions")
     
     similar_parser = subparser.add_parser(name='similar', description="show similar questions")
     similar_parser.add_argument("question")

@@ -108,6 +108,7 @@ def submit(file, session):
     print ('status_code: {}'.format(sub_details['statusCode']))
 
     if runtime == 'N/A' or memory == 'N/A' or runtime_per is None or memory_per is None:
+        logging.info('sub_details: {}'.format(sub_details))
         runtimeError, compileError = sub_details.get('runtimeError'), sub_details['compileError']
         if runtimeError:
             logging.info('runtime error\n{}'.format(runtimeError))

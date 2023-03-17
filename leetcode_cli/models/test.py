@@ -92,10 +92,17 @@ def test(file, session):
     time.sleep(5)
     r = session.request(method='GET', url="https://leetcode.com/submissions/detail/{}/check/".format(interpret_id))
     r = json.loads(r.data)
-    correct_answer = r['correct_answer']
-    if correct_answer:
+    print (r)
+    run_success = r.get('run_success')
+    if run_success:
+        code_answer = r.get('code_answer')
+        logging.info('Test Case: {}, Answer: {}'.format(test_case, code_answer))
         logging.info("Test Passed.")
     else:
+        status_msg = r.get('status_msg')
+        compile_error = r.get('compile_error')
+        logging.info('Status Msg: {}'.format(status_msg))
+        logging.info('Compile Error: {}'.format(compile_error))
         logging.info("Test Failed.")
     logging.info('\n')
 

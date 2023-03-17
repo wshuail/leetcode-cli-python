@@ -14,7 +14,13 @@ lock_symbol = Config.lock_symbol
 
     
 
-def query_user_questions_status(title_slug, session):
+def query_user_questions_status(question, session):
+    
+    try:
+        question_id = int(question)
+        title_slug = map_question_id_to_slug(question_id)
+    except:
+        title_slug = question
     
     query = """
         query userQuestionStatus($titleSlug: String!) {
@@ -69,8 +75,8 @@ def parse_similar_response(response, session):
     questions = response['question']['similarQuestionList']
     questions = [[map_slug_to_question_id(q['titleSlug']), q['title'], q['difficulty'], q['isPaidOnly']] for q in questions]
     for q in questions:
-        question_status = query_user_questions_status(title_slug=q[0], session=session)
-        status = question_status.get('status', None)
+        question_status = query_user_questions_status(question=q[0], session=session)
+        status = question_status.get('question').get('status', None)
         q.append(status)
     questions.sort(key=lambda x: int(x[0]), reverse=True)
 

@@ -26,9 +26,7 @@ def code(question, session, lang=None):
         lang = global_lang
     if lang is None and global_lang is None:
         raise ValueError("Either update config or pass argument for lang")
-    print (Config.lang_suffixes)
     lang_suffix = Config.lang_suffixes[lang]
-    print (lang, lang_suffix)
     comment_symbol = Config.comment_symbol[lang]
 
     try:
@@ -48,6 +46,8 @@ def code(question, session, lang=None):
 
     content = detail['content']
     content = '\n'.join(['{}  '.format(comment_symbol) + line for line in content.splitlines()])
+    
+    hints = detail.get('hints')
 
     code_snippet = [code_snippet for code_snippet in detail['codeSnippets'] if code_snippet['langSlug'] == lang][0]['code']
 
@@ -63,6 +63,9 @@ def code(question, session, lang=None):
         f.write('\n\n\n')
         f.write(content)
         f.write('\n\n\n')
+        if hints:
+            f.write(hints)
+            f.write('\n\n\n')
         if lang == 'python3':
             if re.search(r":\s*List\b", code_snippet):
                 f.write("from typing import List")
