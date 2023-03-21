@@ -71,7 +71,7 @@ def cache_question_detail(detail):
     
     question_id = detail['questionId']
     title_slug = detail['titleSlug']
-    detail = json.dumps(detail)
+    detail = json.dumps(detail, indent=4)
     
     with open(os.path.join(os.path.expanduser('~/.lc/cache'), '{}.{}.json'.format(question_id, title_slug)), 'w') as f:
         f.write(detail)
@@ -82,8 +82,6 @@ def parse_detail_response(response):
 
     detail = response['question']
     
-    detail['content'] = BeautifulSoup(detail['content'], 'html.parser').get_text()
-
     cache_question_detail(detail)
 
     return detail
@@ -92,6 +90,13 @@ def parse_detail_response(response):
 def detail(question, session):
     r = query_question_detail(question, session)
     detail = parse_detail_response(r)
+    if detail.get('isPaidOnly'):
+        print ('Paid Only')
+        return
+
+    content = detail.get('content')
+    if content:
+        detail['content'] = BeautifulSoup(content, 'html.parser').get_text()
     
     fields = ['questionId', 'questionFrontendId', 'title', 'titleSlug', 'content', 'isPaidOnly',
               'difficulty', 'similarQuestions', 'langToValidPlayground', 'topicTags', 

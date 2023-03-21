@@ -65,6 +65,37 @@ def cache_stat_status_pairs():
         f.write(slug_id)
 
 
+def cache_file_exist(question):
+    try:
+        question_id = int(question)
+        title_slug = map_question_id_to_slug(question_id)
+    except:
+        title_slug = question
+        question_id = map_slug_to_question_id(title_slug)
+    
+    question_cache_file = os.path.join(os.path.expanduser('~/.lc/cache'), '{}.{}.json'.format(question_id, title_slug))
+
+    return os.path.exists(question_cache_file)
+
+def load_cache_file(question):
+    try:
+        question_id = int(question)
+        title_slug = map_question_id_to_slug(question_id)
+    except:
+        title_slug = question
+        question_id = map_slug_to_question_id(title_slug)
+    
+    question_cache_file = os.path.join(os.path.expanduser('~/.lc/cache'), '{}.{}.json'.format(question_id, title_slug))
+
+    if not cache_file_exist(question_id):
+        raise ValueError ("target file {} does not exist".format(question_cache_file))
+
+    with open(question_cache_file, 'r') as f:
+        cache = json.loads(f.read())
+        cache['similarQuestions'] = json.loads(cache['similarQuestions'])
+
+    return cache
+
 def create_config_file():
     config = {}
     config['leetcode_session'] = None
