@@ -108,12 +108,14 @@ def detail(question, session):
     topic_tags = [topic['name'] for topic in detail['topicTags']]
     content = detail['content']
     hints = detail['hints']
+    title_slug = detail['titleSlug']
 
     print ("{}:  {}".format("Question Id".ljust(20), question_id))
     print ("{}:  {}".format("Question Title".ljust(20), title))
     print ("{}:  {}".format("Difficulty".ljust(20), difficulty))
     print ("{}:  {}".format("Topics".ljust(20), topic_tags))
-    print ('\n\n')
+    print ("{}:  {}{}".format("Title Slug".ljust(20), "https://leetcode.com/problems/", title_slug))
+    print ('\n')
     print (content)
     print ('\n\n')
     if hints:
