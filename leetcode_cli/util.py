@@ -42,13 +42,13 @@ def cache_stat_status_pairs():
         question_title_slug = stat.get('question__title_slug')
         total_acs = stat.get('total_acs')
         total_submitted = stat.get('total_submitted')
-        id_slug_map[question_id] = {'question_title': question_title,
-                                    'question_title_slug': question_title_slug,
-                                    'total_acs': total_acs,
-                                    'total_submitted': total_submitted}
+        id_slug_map[frontend_question_id] = {'question_title': question_title,
+                                             'question_title_slug': question_title_slug,
+                                             'total_acs': total_acs,
+                                             'total_submitted': total_submitted}
         
         slug_id_map[question_title_slug] = {'question_title': question_title,
-                                            'question_id': question_id,
+                                            'question_id': frontend_question_id,
                                             'total_acs': total_acs,
                                             'total_submitted': total_submitted}
 
@@ -95,6 +95,7 @@ def load_cache_file(question):
         cache['similarQuestions'] = json.loads(cache['similarQuestions'])
 
     return cache
+
 
 def create_config_file():
     config = {}
@@ -197,6 +198,9 @@ def update_config():
 
 def init(func):
     def wrapper(*args, **kwargs):
+        if not os.path.exists(os.path.expanduser('~/.lc')):
+            os.mkdir(os.path.expanduser('~/.lc'))
+
         id_slug_cache_exist = os.path.exists(os.path.join(os.path.expanduser('~/.lc'), id_slug_cache)) 
         slug_id_cache_exist = os.path.exists(os.path.join(os.path.expanduser('~/.lc'), slug_id_cache))
         if not id_slug_cache_exist or not slug_id_cache_exist:
@@ -214,6 +218,8 @@ def init(func):
     return wrapper
 
 class Config(object):
+    if not os.path.exists(os.path.expanduser('~/.lc')):
+        os.mkdir(os.path.expanduser('~/.lc'))
     if not os.path.exists(os.path.join(os.path.expanduser('~/.lc'), 'config.json')):
         create_config_file()
     with open(os.path.join(os.path.expanduser('~/.lc'), 'config.json'), 'r') as f:

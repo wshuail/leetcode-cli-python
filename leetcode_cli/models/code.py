@@ -10,6 +10,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
 from leetcode_cli.models.session import build_session
 from leetcode_cli.models.detail import query_question_detail
 from leetcode_cli.models.detail import parse_detail_response
+from leetcode_cli.models.detail import cache_question_detail
 from leetcode_cli.util import map_question_id_to_slug
 from leetcode_cli.util import map_slug_to_question_id
 from leetcode_cli.util import Config
@@ -49,8 +50,10 @@ def code(question, session, lang=None):
         session = build_session()
         response = query_question_detail(question_id, session)
         detail = parse_detail_response(response)
+        cache_question_detail(detail)
 
-    content = detail['content']
+    # content = detail['content']
+    content = BeautifulSoup(detail['content'], 'html.parser').get_text()
     content = '\n'.join(['{}  '.format(comment_symbol) + line for line in content.splitlines()])
     
     hints = detail.get('hints')
@@ -66,9 +69,9 @@ def code(question, session, lang=None):
             f.write('\n')
         f.write('{}  Date: {}'.format(comment_symbol, datetime.now().strftime('%Y-%m-%d')))
         f.write('\n')
-        f.write('\n\n\n')
+        f.write('\n\n')
         f.write(content)
-        f.write('\n\n\n')
+        f.write('\n\n')
         if hints:
             f.write('#  Hints:\n')
             for i, hint in enumerate(hints):
@@ -77,7 +80,7 @@ def code(question, session, lang=None):
         if lang == 'python3':
             if re.search(r":\s*List\b", code_snippet):
                 f.write("from typing import List")
-                f.write('\n\n\n')
+                f.write('\n\n')
         f.write(code_snippet)
 
 

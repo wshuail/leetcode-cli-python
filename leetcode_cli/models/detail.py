@@ -8,6 +8,8 @@ from leetcode_cli.util import map_question_id_to_slug
 from leetcode_cli.util import Config
 
 
+check_symbol = Config.check_symbol
+not_check_symbol = Config.not_check_symbol
 
 
 def query_question_detail(question, session):
@@ -69,7 +71,7 @@ def cache_question_detail(detail):
     if not os.path.exists(os.path.expanduser('~/.lc/cache')):
         os.makedirs(os.path.expanduser('~/.lc/cache'), exist_ok=True)
     
-    question_id = detail['questionId']
+    question_id = detail['questionFrontendId']
     title_slug = detail['titleSlug']
     detail = json.dumps(detail, indent=4)
     
@@ -95,29 +97,36 @@ def detail(question, session):
         return
 
     content = detail.get('content')
-    if content:
-        detail['content'] = BeautifulSoup(content, 'html.parser').get_text()
+    print ('content', content)
+    # if content:
+    #     detail['content'] = BeautifulSoup(content, 'html.parser').get_text()
     
     fields = ['questionId', 'questionFrontendId', 'title', 'titleSlug', 'content', 'isPaidOnly',
               'difficulty', 'similarQuestions', 'langToValidPlayground', 'topicTags', 
               'codeSnippets', 'stats', 'hints', 'solution', 'status', 'metaData']
 
     question_id = detail['questionId']
+    frontend_question_id = detail['questionFrontendId']
     title = detail['title']
     difficulty = detail['difficulty']
     topic_tags = [topic['name'] for topic in detail['topicTags']]
-    content = detail['content']
+    # content = detail['content']
+    content = BeautifulSoup(detail['content'], 'html.parser').get_text()
+    print ('content 2', content)
     hints = detail['hints']
     title_slug = detail['titleSlug']
+    status = check_symbol if detail['status'] == 'ac' else not_check_symbol
 
     print ("{}:  {}".format("Question Id".ljust(20), question_id))
+    print ("{}:  {}".format("Frontend Id".ljust(20), frontend_question_id))
     print ("{}:  {}".format("Question Title".ljust(20), title))
     print ("{}:  {}".format("Difficulty".ljust(20), difficulty))
     print ("{}:  {}".format("Topics".ljust(20), topic_tags))
+    print ("{}:  {}".format("Status".ljust(20), status))
     print ("{}:  {}{}".format("Title Slug".ljust(20), "https://leetcode.com/problems/", title_slug))
     print ('\n')
     print (content)
-    print ('\n\n')
+    # print ('\n\n')
     if hints:
         print ('Hints: ')
         for hint in hints:
